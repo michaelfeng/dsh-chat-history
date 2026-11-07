@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Conversation History",
-    "description": "Adds a History view inside every conversation that searches chat history across all sessions and reopens any matching conversation."
+    "description": "Adds a History panel in the sidebar that searches chat history across all sessions and reopens any matching conversation."
   }
 }

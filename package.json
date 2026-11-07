@@ -1,8 +1,8 @@
 {
   "name": "dsh-conversation-history",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
-  "description": "Conversation view that searches chat history across every Session",
+  "description": "Sidebar panel that searches chat history across every Session",
   "exports": {
     ".": "./index.js",
     "./client": "./client.js",

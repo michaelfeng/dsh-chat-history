@@ -34,6 +34,10 @@ window.__ModuleLoader__.load({
     const CONTEXT_SEEK_STEP = 8;
     /** Page size requested from the Host dialogue-only search endpoint. */
     const SEARCH_HOST_LIMIT = 100;
+    /** Sidebar panel id: the panellist entry and the `main` panel share it. */
+    const PANEL_ID = 'history';
+    /** Sits directly under Plugins (order 0) and above Schedules (order 10) and the More menu. */
+    const PANEL_ORDER = 5;
     /** Connection RPC channel of the bundle's Host half: exact `/api` Fetch routes. */
     const HOST_CHANNEL = '/api';
     /** Longest text retained per context row (bounds memory and match scans). */
@@ -1369,9 +1373,10 @@ window.__ModuleLoader__.load({
       }));
     }
 
-    function HistoryIcon() {
+    function HistoryIcon(props) {
+      const size = props !== null && typeof props === 'object' && typeof props.size === 'number' ? props.size : 30;
       return h('svg', {
-        viewBox: '0 0 32 32', width: 30, height: 30, 'aria-hidden': true, focusable: 'false',
+        viewBox: '0 0 32 32', width: size, height: size, 'aria-hidden': true, focusable: 'false',
       }, h('path', {
         d: 'M5 9.5A3.5 3.5 0 0 1 8.5 6h15A3.5 3.5 0 0 1 27 9.5v10a3.5 3.5 0 0 1-3.5 3.5H14l-6 4.5V23H8.5A3.5 3.5 0 0 1 5 19.5Z',
         fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinejoin: 'round',
@@ -2263,12 +2268,19 @@ window.__ModuleLoader__.load({
             reference.release();
           }
         };
-        ctx.slots.inject('conversation.view', () => ctx.slots.register({
-          name: 'conversation.view',
-          id: 'history',
-          order: 20,
+        // A global sidebar panel instead of a per-conversation tab: the row sits
+        // directly below Plugins and above the More menu, and opens as a main panel.
+        ctx.slots.inject('sidebar.panellist', () => ctx.slots.register({
+          name: 'sidebar.panellist',
+          id: PANEL_ID,
+          order: PANEL_ORDER,
           locale: NS,
           label: () => t('view.history'),
+        }, HistoryIcon));
+        ctx.slots.inject('main', () => ctx.slots.register({
+          name: 'main',
+          key: PANEL_ID,
+          locale: NS,
           inject: () => ({ searchHistory, openConversation, loadSessionContext }),
         }, ConversationHistoryView));
       },

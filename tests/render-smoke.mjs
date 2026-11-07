@@ -126,13 +126,15 @@ const fakeCtx = {
   },
 };
 exportsObject.apply(fakeCtx);
-const registration = registrations.find((entry) => entry.options.id === 'history');
-if (registration === undefined) throw new Error('history view was not registered');
-if (registration.options.name !== 'conversation.view') throw new Error('registered into the wrong slot');
-if (registration.options.order !== 20) throw new Error('unexpected order');
-if (typeof registration.options.label !== 'function' || registration.options.label() !== 'view.history') {
-  throw new Error('view label thunk is not localized');
+const navRegistration = registrations.find((entry) => entry.options.name === 'sidebar.panellist' && entry.options.id === 'history');
+if (navRegistration === undefined) throw new Error('history sidebar row was not registered');
+if (navRegistration.options.order !== 5) throw new Error('sidebar row must sit under Plugins and above Schedules/More');
+if (typeof navRegistration.options.label !== 'function' || navRegistration.options.label() !== 'view.history') {
+  throw new Error('sidebar label thunk is not localized');
 }
+if (registrations.some((entry) => entry.options.name === 'conversation.view')) throw new Error('the conversation tab registration must be gone');
+const registration = registrations.find((entry) => entry.options.name === 'main' && entry.options.key === 'history');
+if (registration === undefined) throw new Error('history main panel was not registered');
 const injected = registration.options.inject();
 if (typeof injected.searchHistory !== 'function' || typeof injected.openConversation !== 'function') {
   throw new Error('injected operations missing');

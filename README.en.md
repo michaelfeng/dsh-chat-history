@@ -1,6 +1,6 @@
 # Conversation History
 
-A **History** tab for DeepSeek Harness. Find something you discussed earlier and read its context without leaving the current view.
+A **History** panel in the DeepSeek Harness sidebar, directly under **Plugins** and above **Schedules** and the **More** menu. It opens as a main panel: search chat history across conversations, read context in a side pane, or open the original conversation.
 
 [中文](README.md) · [Installation](#installation) · [Installation verification](#installation-verification) · [How-it-works](#how-it-works) · [Development](#development)
 
@@ -24,10 +24,10 @@ Search includes user and assistant text. It excludes tool output, injected messa
 In DeepSeek Harness, open **Plugins**, click the arrow beside **Add plugin**, and choose **Install a third-party plugin**. Paste the following address and click **Install**:
 
 ```text
-github:michaelfeng/dsh-conversation-history#v1.1.0
+github:michaelfeng/dsh-conversation-history#v1.2.0
 ```
 
-After installation, click **Enable now**. Open the plugin details and confirm that both the bundle and its **Conversation History component** are enabled and the component shows **Running**. Open a conversation that already has messages and select **History**; the blank new-session welcome screen does not show conversation tabs.
+After installation, click **Enable now**. Open the plugin details and confirm that both the bundle and its **Conversation History component** are enabled and the component shows **Running**. The sidebar then shows **History** directly under **Plugins**; click it to open the panel, with or without an active conversation.
 
 For a local checkout:
 
@@ -44,11 +44,13 @@ If you previously installed an `@local/dsh-conversation-history` development cop
 
 ## Usage
 
-Enter at least two characters, such as `release notes`. Select a message excerpt to preview its context, or select a title match to see recent messages. Use the previous/next controls to move between phrase occurrences, and **Open conversation** to return to the full conversation.
+Click **History** in the sidebar, then enter at least two characters, such as `release notes`. Select a message excerpt to preview its context, or select a title match to see recent messages. Use the previous/next controls to move between phrase occurrences, and **Open conversation** to return to the full conversation.
 
 Each matching conversation contributes its latest matching message. Results are sorted by that message's timestamp. Responses include up to 100 conversations and indicate truncation. Regular expressions and fuzzy matching are not supported.
 
 ## Installation verification
+
+Version 1.2.0 only moves the entry point from the in-conversation History tab to a sidebar panel; search, locating and context behavior are unchanged. The installation verification below corresponds to **v1.1.0**.
 
 Verified on 2026-10-28 using the Web instance bundled with the DeepSeek Harness **0.2.1-rc.3** desktop distribution on macOS. The instance used a separate temporary `DSH_HOME`; **v1.1.0** was installed from GitHub through the Plugins UI, with no model API key configured.
 

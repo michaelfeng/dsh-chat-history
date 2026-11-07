@@ -1,6 +1,6 @@
 # Conversation History
 
-给 DeepSeek Harness 加一个 **History / 历史** 标签页。搜到以前聊过的内容，直接在旁边读上下文。
+在 DeepSeek Harness 的侧边栏加一个 **History / 历史** 面板，位置在 **Plugins / 插件** 下方、**Schedules / 定时任务** 与 **More / 更多** 菜单上方。点击后作为主区域打开，可跨会话搜索聊天记录、在右侧读上下文，或打开原会话。
 
 [English](README.en.md) · [安装](#安装) · [安装验证](#安装验证) · [工作方式](#工作方式) · [开发](#开发)
 
@@ -23,10 +23,10 @@
 在 DeepSeek Harness 中打开 **Plugins / 插件**，点击 **Add plugin / 添加插件** 右侧的下拉箭头，选择 **Install a third-party plugin / 安装第三方插件**，粘贴下面的地址并点击 **Install / 安装**：
 
 ```text
-github:michaelfeng/dsh-conversation-history#v1.1.0
+github:michaelfeng/dsh-conversation-history#v1.2.0
 ```
 
-安装完成后点击 **Enable now / 立即启用**。在插件详情中确认插件和 **Conversation History 组件** 两个开关都已开启，组件显示 **Running / 运行中**。进入一个已有消息的会话，即可看到 **History / 历史** 标签页；空白的新会话欢迎页不会显示会话标签。
+安装完成后点击 **Enable now / 立即启用**。在插件详情中确认插件和 **Conversation History 组件** 两个开关都已开启，组件显示 **Running / 运行中**。随后侧边栏 **Plugins / 插件** 下方会出现 **History / 历史** 面板，点击即可使用；它不依赖当前是否打开了会话。
 
 如果需要使用本地源码：
 
@@ -43,7 +43,7 @@ cd dsh-conversation-history
 
 ## 使用
 
-1. 进入任意会话的 **History / 历史** 页面。
+1. 点击侧边栏的 **History / 历史** 面板。
 2. 输入至少两个字符，例如“发布”或 `release notes`。
 3. 点击消息摘要，查看右侧上下文；点击标题命中，查看该会话的近期消息。
 4. 用匹配导航按钮跳转关键词，需要继续聊天时点击 **打开会话**。
@@ -51,6 +51,8 @@ cd dsh-conversation-history
 每个会话返回最近一条匹配消息，结果按这条消息的时间排序。一次最多返回 100 个会话，超过时会提示。短语搜索不支持正则表达式或模糊匹配。
 
 ## 安装验证
+
+1.2.0 只把入口从会话内的 History 标签页移到侧边栏面板，搜索、定位与上下文逻辑未变；下面的安装验证记录对应 **v1.1.0**。
 
 2026-10-28 在 macOS 上，使用 DeepSeek Harness **0.2.1-rc.3** 桌面发行版附带的 Web 实例完成验证。实例使用独立的临时 `DSH_HOME`，通过插件页面从 GitHub 安装 **v1.1.0**，未配置模型 API key。
 
