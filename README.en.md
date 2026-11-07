@@ -4,7 +4,7 @@ A **History** panel in the DeepSeek Harness sidebar, directly under **Plugins** 
 
 [中文](README.md) · [Installation](#installation) · [Installation verification](#installation-verification) · [How-it-works](#how-it-works) · [Development](#development)
 
-![Search results with an in-place conversation preview](docs/images/search-en.jpg)
+![Sidebar History panel with search results and an in-place conversation preview](docs/images/search-en.jpg)
 
 *Rendered from the actual plugin component. Every conversation, title and message shown is fictional.*
 

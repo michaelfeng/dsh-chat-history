@@ -4,7 +4,7 @@
 
 [English](README.en.md) · [安装](#安装) · [安装验证](#安装验证) · [工作方式](#工作方式) · [开发](#开发)
 
-![搜索聊天记录并预览上下文](docs/images/search-zh.jpg)
+![在侧边栏 History 面板中搜索聊天记录并预览上下文](docs/images/search-zh.jpg)
 
 *演示图由插件的真实界面组件渲染，所有会话、标题和消息均为虚构示例。*
 
