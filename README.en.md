@@ -1,4 +1,4 @@
-# Conversation History
+# Chat History
 
 A **History** panel in the DeepSeek Harness sidebar, directly under **Plugins** and above **Schedules** and the **More** menu. It opens as a main panel: search chat history across conversations, read context in a side pane, or open the original conversation.
 
@@ -24,23 +24,25 @@ Search includes user and assistant text. It excludes tool output, injected messa
 In DeepSeek Harness, open **Plugins**, click the arrow beside **Add plugin**, and choose **Install a third-party plugin**. Paste the following address and click **Install**:
 
 ```text
-github:michaelfeng/dsh-conversation-history#v1.2.0
+github:michaelfeng/dsh-chat-history#v2.0.0
 ```
 
-After installation, click **Enable now**. Open the plugin details and confirm that both the bundle and its **Conversation History component** are enabled and the component shows **Running**. The sidebar then shows **History** directly under **Plugins**; click it to open the panel, with or without an active conversation.
+After installation, click **Enable now**. Open the plugin details and confirm that both the bundle and its **Chat History component** are enabled and the component shows **Running**. The sidebar then shows **History** directly under **Plugins**; click it to open the panel, with or without an active conversation.
+
+> **Upgrading from 1.x to 2.0.0**: the project was renamed from `dsh-conversation-history` to `dsh-chat-history`. Remove the old **Conversation History** plugin (bundle and component) before installing the new version so two bundles never register the same panel. The cache directory also moved from `cache/conversation-history` to `cache/chat-history`, so the first open rebuilds the projection once.
 
 For a local checkout:
 
 ```sh
-git clone https://github.com/michaelfeng/dsh-conversation-history.git
-cd dsh-conversation-history
+git clone https://github.com/michaelfeng/dsh-chat-history.git
+cd dsh-chat-history
 ```
 
 Enter the checkout’s absolute directory path in the same third-party installation dialog. Alternatively, use the Harness plugin-management tool's `install_bundle` action with the checkout's absolute path as `target`.
 
 This is an independent third-party plugin, not an official DeepSeek project. Integration was checked against the desktop plugin interfaces in Harness **0.2.1-rc.3**. Other versions may require changes. The plugin depends on Harness session, connection and UI services; it is not a standalone web app.
 
-If you previously installed an `@local/dsh-conversation-history` development copy, disable or remove it before installing this package to avoid duplicate component registration.
+If you previously installed an `@local/dsh-chat-history` development copy, disable or remove it before installing this package to avoid duplicate component registration.
 
 ## Usage
 
@@ -50,7 +52,7 @@ Each matching conversation contributes its latest matching message. Results are 
 
 ## Installation verification
 
-Version 1.2.0 only moves the entry point from the in-conversation History tab to a sidebar panel; search, locating and context behavior are unchanged. The installation verification below corresponds to **v1.1.0**.
+Version 2.0.0 renames the project and package from `dsh-conversation-history` to `dsh-chat-history`, and renames the internal RPC path, cache directory and locale namespace to `chat-history`; search, locating and context behavior are unchanged. Version 1.2.0 only moved the entry point from the in-conversation History tab to a sidebar panel. The installation verification below corresponds to **v1.1.0**.
 
 Verified on 2026-10-28 using the Web instance bundled with the DeepSeek Harness **0.2.1-rc.3** desktop distribution on macOS. The instance used a separate temporary `DSH_HOME`; **v1.1.0** was installed from GitHub through the Plugins UI, with no model API key configured.
 
@@ -82,7 +84,7 @@ Large histories take longer to index initially. Query latency depends on corpus 
 
 The plugin makes no external network requests, calls no model, requires no additional API key and includes no telemetry. The UI communicates with its backend over the Harness connection channel; remote deployments inherit the host's connection and storage boundaries.
 
-Derived caches live under `$DSH_HOME/cache/conversation-history/` and contain conversation text. They are not encrypted: protect them like the original history. Original session logs are never modified. To rebuild, turn the component off, remove its derived cache, then turn it back on.
+Derived caches live under `$DSH_HOME/cache/chat-history/` and contain conversation text. They are not encrypted: protect them like the original history. Original session logs are never modified. To rebuild, turn the component off, remove its derived cache, then turn it back on.
 
 ## Development
 
@@ -113,7 +115,7 @@ Open the loopback URL printed in the terminal. This renders the real component w
 | `tests/` | Synthetic regression fixtures |
 | `scripts/` | Demo rendering and release-content checks |
 
-For bug reports, include the Harness/plugin versions, reproduction steps and a minimal sanitized error in an [issue](https://github.com/michaelfeng/dsh-conversation-history/issues). Do not attach raw conversations, account settings or credentials.
+For bug reports, include the Harness/plugin versions, reproduction steps and a minimal sanitized error in an [issue](https://github.com/michaelfeng/dsh-chat-history/issues). Do not attach raw conversations, account settings or credentials.
 
 ## License
 

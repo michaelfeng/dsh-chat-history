@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0 — 2026-11-08
+
+Project rename: `dsh-conversation-history` → `dsh-chat-history`.
+
+- Renamed the GitHub repository, npm package name, bundle row id, client module id, locale namespace, Host RPC paths (`/api/chat-history/*`) and the derived cache directory (`cache/chat-history`).
+- The sidebar panel, search, locating and context behavior are unchanged.
+- Breaking change for existing installations: remove the old **Conversation History** bundle and component first, then install `github:michaelfeng/dsh-chat-history#v2.0.0`. The renamed cache rebuilds once on first open.
+
 ## 1.2.0 — 2026-11-07
 
 - Moved the entry point from the in-conversation History tab to a global sidebar panel directly under Plugins (order 5, above Schedules and the More menu), rendered as a main panel.

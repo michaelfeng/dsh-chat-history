@@ -19,7 +19,7 @@ function harness(logs, cacheDir, listDelay = 0) {
     effect:fn=>{const dispose=fn();if(typeof dispose==='function')disposers.push(dispose);},
   }, {cacheDir});
   return {revisions, get reads(){return reads;}, close:async()=>{for(const fn of disposers)await fn();},
-    call:async (endpoint,payload)=>{const response=await routes.get('/api/conversation-history/'+endpoint).fetch(new Request('http://localhost/api',{method:'POST',body:JSON.stringify({type:'client-request',rpcId:'t',payload})}));return (await response.json()).result;}};
+    call:async (endpoint,payload)=>{const response=await routes.get('/api/chat-history/'+endpoint).fetch(new Request('http://localhost/api',{method:'POST',body:JSON.stringify({type:'client-request',rpcId:'t',payload})}));return (await response.json()).result;}};
 }
 
 test('complete search indexes dialogue once, includes large/low-ranked sessions, and refreshes changed logs', async()=>{
@@ -66,7 +66,7 @@ test('concurrent searches share one build and expose incomplete progress without
   list:async()=>[{header:{id:'large'},revision:'1',eventCount:1,sizeBytes:100000000}],
   open:async()=>({read:async()=>{reads++;await gate;return {events:[event(0,'needle')]};},close:async()=>{}}),
  }:undefined,connection:{fetch:{register:r=>{routes.set(r.path,r);return ()=>{};}}},effect:f=>disposers.push(f())});
- const search=async()=>{const res=await routes.get('/api/conversation-history/search').fetch(new Request('http://localhost/api',{method:'POST',body:JSON.stringify({type:'client-request',rpcId:'t',payload:{query:'needle'}})}));return (await res.json()).result;};
+ const search=async()=>{const res=await routes.get('/api/chat-history/search').fetch(new Request('http://localhost/api',{method:'POST',body:JSON.stringify({type:'client-request',rpcId:'t',payload:{query:'needle'}})}));return (await res.json()).result;};
  try {
   const [a,b]=await Promise.all([search(),search()]);
   assert.equal(a.value.indexing,true);assert.equal(b.value.indexing,true);assert.equal(reads,1);

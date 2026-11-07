@@ -52,14 +52,14 @@ async function search(index, payload, signal) {
 
 async function locate(index, payload, signal) {
   const id = typeof payload?.sessionId === 'string' ? payload.sessionId : '';
-  if (!id) return failure('conversation-history/invalid-request','sessionId must be a non-empty string');
+  if (!id) return failure('chat-history/invalid-request','sessionId must be a non-empty string');
   const pattern = compileQueryPattern(payload.query);
   const empty = {ok:true,value:{found:false,rows:[],anchorSeq:0,total:0,matches:0}};
   if (!pattern) return empty;
   const complete = await bounded(index.refresh().then(()=>true), 4000, signal);
   const rows = index.entries.get(id)?.rows;
   if (!rows) {
-    if (!complete || index.progress.failed) return failure('conversation-history/index-pending','Conversation is still being indexed; retry shortly.');
+    if (!complete || index.progress.failed) return failure('chat-history/index-pending','Conversation is still being indexed; retry shortly.');
     return empty;
   }
   let anchor = rows.findIndex(row=>row.seq===payload.seq && makeSnippet(row.prose,pattern)!==null);
@@ -79,17 +79,17 @@ export function apply(ctx, config={}) {
     if (!valid) return Response.json({type:'server-response',rpcId:'invalid-request',result:failure('gateway/bad-request','invalid client-request message')},{status:400});
     let result;
     try { result=await (endpoint==='search'?search:locate)(index,message.payload,request.signal); }
-    catch(error) {result=failure('conversation-history/query-failed',error.message);}
+    catch(error) {result=failure('chat-history/query-failed',error.message);}
     return Response.json({type:'server-response',rpcId:message.rpcId,result});
   };
   try {
     for(const endpoint of ['search','locate']) disposers.push(ctx.connection.fetch.register({
-      path:'/api/conversation-history/'+endpoint, methods:['POST'],requestBody:'buffered',fetch:handler(endpoint),
+      path:'/api/chat-history/'+endpoint, methods:['POST'],requestBody:'buffered',fetch:handler(endpoint),
     }));
   } catch(error) { for(const dispose of disposers)void dispose();void index.close();throw error; }
   // Start once while the reader is still opening the view. Searches share this
   // work and return bounded progress; they never enqueue parallel rebuilds.
   const warmup=setTimeout(()=>{void index.refresh().catch(()=>{});},50);
-  ctx.effect(()=>async()=>{clearTimeout(warmup);for(const dispose of disposers)await dispose();await index.close();},'conversation-history: dispose routes and index');
+  ctx.effect(()=>async()=>{clearTimeout(warmup);for(const dispose of disposers)await dispose();await index.close();},'chat-history: dispose routes and index');
 }
 export const inject=['connection'];

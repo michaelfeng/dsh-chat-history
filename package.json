@@ -1,6 +1,6 @@
 {
-  "name": "dsh-conversation-history",
-  "version": "1.2.0",
+  "name": "dsh-chat-history",
+  "version": "2.0.0",
   "type": "module",
   "description": "Sidebar panel that searches chat history across every Session",
   "exports": {
@@ -50,16 +50,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/michaelfeng/dsh-conversation-history.git"
+    "url": "git+https://github.com/michaelfeng/dsh-chat-history.git"
   },
-  "homepage": "https://github.com/michaelfeng/dsh-conversation-history#readme",
+  "homepage": "https://github.com/michaelfeng/dsh-chat-history#readme",
   "bugs": {
-    "url": "https://github.com/michaelfeng/dsh-conversation-history/issues"
+    "url": "https://github.com/michaelfeng/dsh-chat-history/issues"
   },
   "keywords": [
     "deepseek",
     "dsh-plugin",
-    "conversation-history",
+    "chat-history",
     "search"
   ]
 }

@@ -1,13 +1,13 @@
 window.__ModuleLoader__.load({
-  id: 'dsh-conversation-history',
+  id: 'dsh-chat-history',
   factory(require) {
     const React = require('react');
     const h = React.createElement;
 
     /** Dictionary namespace owned by this plugin (the View tab label binds to it). */
-    const NS = 'conversation-history';
+    const NS = 'chat-history';
     /** Stable identifier used for the injected stylesheet tag. */
-    const PACKAGE_ID = 'dsh-conversation-history';
+    const PACKAGE_ID = 'dsh-chat-history';
     /** Pause after the last keystroke before one Host search; a superseded query aborts the previous one. */
     const SEARCH_DEBOUNCE_MS = 300;
     /** Debounce used after a slow query, so typing does not re-trigger heavy searches. */
@@ -1503,7 +1503,7 @@ window.__ModuleLoader__.load({
                 }
               } else if (controller.signal.aborted === false) {
                 const message = describeFailure(response === undefined || response === null ? undefined : response.error);
-                console.warn('[conversation-history] search failed:', message);
+                console.warn('[chat-history] search failed:', message);
                 setStatus('error');
                 setErrorMessage(message);
               }
@@ -1517,7 +1517,7 @@ window.__ModuleLoader__.load({
               }
               if (token !== requestRef.current || controller.signal.aborted) return;
               const message = describeFailure(error);
-              console.warn('[conversation-history] search failed:', message);
+              console.warn('[chat-history] search failed:', message);
               setStatus('error');
               setErrorMessage(message);
             } finally {
@@ -1562,7 +1562,7 @@ window.__ModuleLoader__.load({
           } catch (error) {
             if (!alive) return;
             const message = describeFailure(error);
-            console.warn('[conversation-history] context load failed:', message);
+            console.warn('[chat-history] context load failed:', message);
             setContext({ kind: 'error', message });
           }
         };
@@ -1665,7 +1665,7 @@ window.__ModuleLoader__.load({
         try {
           openConversation(id);
         } catch (error) {
-          console.error('[conversation-history] could not open conversation:', error);
+          console.error('[chat-history] could not open conversation:', error);
         }
       };
 
@@ -2098,8 +2098,8 @@ window.__ModuleLoader__.load({
        * @param ctx - Client context with the slots, locale, sessions, and uiWorkspace services.
        */
       apply(ctx) {
-        ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'conversation-history: dictionaries');
-        ctx.effect(() => insertStyles(), 'conversation-history: styles');
+        ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'chat-history: dictionaries');
+        ctx.effect(() => insertStyles(), 'chat-history: styles');
         const t = ctx.locale.bind(NS);
         /**
          * Search dialogue-only results through the bundle's Host half, which
@@ -2117,10 +2117,10 @@ window.__ModuleLoader__.load({
           if (rpc === undefined || rpc === null || typeof rpc.call !== 'function') return null;
           let result;
           try {
-            result = await rpc.call(HOST_CHANNEL, 'conversation-history/search', { query, limit: SEARCH_HOST_LIMIT, ...(generation === undefined ? {} : {generation}) }, signal);
+            result = await rpc.call(HOST_CHANNEL, 'chat-history/search', { query, limit: SEARCH_HOST_LIMIT, ...(generation === undefined ? {} : {generation}) }, signal);
           } catch (error) {
             if (signal !== undefined && signal !== null && signal.aborted) return null;
-            console.warn('[conversation-history] host search failed; falling back to the shipped search:', error);
+            console.warn('[chat-history] host search failed; falling back to the shipped search:', error);
             return null;
           }
           if (result === null || typeof result !== 'object' || result.ok !== true) return null;
@@ -2164,14 +2164,14 @@ window.__ModuleLoader__.load({
           if (rpc === undefined || rpc === null || typeof rpc.call !== 'function') return null;
           let result;
           try {
-            result = await rpc.call(HOST_CHANNEL, 'conversation-history/locate', {
+            result = await rpc.call(HOST_CHANNEL, 'chat-history/locate', {
               sessionId: targetSessionId,
               query: typeof query === 'string' ? query : '',
               snippet: typeof snippet === 'string' ? snippet : '',
               seq: typeof seq === 'number' ? seq : 0,
             });
           } catch (error) {
-            console.warn('[conversation-history] host locate failed; falling back to history pages:', error);
+            console.warn('[chat-history] host locate failed; falling back to history pages:', error);
             return null;
           }
           if (result === null || typeof result !== 'object' || result.ok !== true) return null;

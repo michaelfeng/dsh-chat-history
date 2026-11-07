@@ -72,7 +72,7 @@ new Function(source)();
 if (captured === undefined) throw new Error('client module did not call window.__ModuleLoader__.load');
 
 const exportsObject = captured.factory(require);
-if (captured.id !== 'dsh-conversation-history') throw new Error(`bad module id ${captured.id}`);
+if (captured.id !== 'dsh-chat-history') throw new Error(`bad module id ${captured.id}`);
 
 // ---- fake host context -------------------------------------------------------
 const translated = [];
@@ -485,7 +485,7 @@ const props = {
   hostConnection = {
     rpc: {
       call: async (channel, endpoint, payload) => {
-        if (channel !== '/api' || endpoint !== 'conversation-history/search') throw new Error('unexpected host RPC target');
+        if (channel !== '/api' || endpoint !== 'chat-history/search') throw new Error('unexpected host RPC target');
         return { ok: true, value: { items: [{ sessionId: 'dialogue-session', snippet: 'assistant SEARCH answer' }], hasMore: false, proseFiltered: payload.query === 'SEARCH' } };
       },
     },
@@ -527,7 +527,7 @@ const props = {
   hostConnection = {
     rpc: {
       call: async (channel, endpoint, payload) => {
-        if (endpoint !== 'conversation-history/locate') throw new Error('unexpected endpoint');
+        if (endpoint !== 'chat-history/locate') throw new Error('unexpected endpoint');
         seenSeq = payload.seq;
         return { ok: true, value: { found: true, anchorSeq: 42, rows: [{ seq: 42, time: 1, role: 'assistant', text: 'release plan answer' }], total: 1, matches: 1 } };
       },
@@ -544,7 +544,7 @@ const props = {
   hostConnection = {
     rpc: {
       call: async (channel, endpoint) => {
-        if (channel !== '/api' || endpoint !== 'conversation-history/locate') throw new Error('unexpected host RPC target');
+        if (channel !== '/api' || endpoint !== 'chat-history/locate') throw new Error('unexpected host RPC target');
         return { ok: true, value: { found: false, rows: [], anchorSeq: 0, total: 0, matches: 0 } };
       },
     },
@@ -560,7 +560,7 @@ const props = {
   hostConnection = {
     rpc: {
       call: async (channel, endpoint) => {
-        if (channel !== '/api' || endpoint !== 'conversation-history/locate') throw new Error('unexpected host RPC target');
+        if (channel !== '/api' || endpoint !== 'chat-history/locate') throw new Error('unexpected host RPC target');
         return {
           ok: true,
           value: {
@@ -661,17 +661,17 @@ const props = {
     return body.result;
   };
 
-  const located = await callRoute('/api/conversation-history/locate', 'conversation-history/locate', { sessionId: 'session-a', query: 'SEARCH', seq: 1 });
+  const located = await callRoute('/api/chat-history/locate', 'chat-history/locate', { sessionId: 'session-a', query: 'SEARCH', seq: 1 });
   if (located.ok !== true) throw new Error(`host locate failed: ${JSON.stringify(located)}`);
   if (located.value.found !== true || located.value.anchorSeq !== 1) throw new Error(`host locate must anchor on prose, got ${located.value.anchorSeq}`);
   if (located.value.rows.length < 2 || located.value.rows[0].seq !== 1 || located.value.rows[0].role !== 'user') throw new Error(`host locate rows unexpected: ${JSON.stringify(located.value.rows)}`);
   if (located.value.rows.some((row) => row.seq === 5)) throw new Error('locate rows leaked tool content');
-  const fallbackAnchor = await callRoute('/api/conversation-history/locate', 'conversation-history/locate', { sessionId: 'session-a', query: 'SEARCH' });
+  const fallbackAnchor = await callRoute('/api/chat-history/locate', 'chat-history/locate', { sessionId: 'session-a', query: 'SEARCH' });
   if (fallbackAnchor.value.found !== true || fallbackAnchor.value.anchorSeq !== 1) throw new Error('locate without a sequence must fall back to the first prose match');
-  const emptyLocate = await callRoute('/api/conversation-history/locate', 'conversation-history/locate', { sessionId: 'session-b', query: 'SEARCH' });
+  const emptyLocate = await callRoute('/api/chat-history/locate', 'chat-history/locate', { sessionId: 'session-b', query: 'SEARCH' });
   if (emptyLocate.value.found !== false || emptyLocate.value.rows.length !== 0) throw new Error('session without dialogue prose must not locate');
 
-  const searched = await callRoute('/api/conversation-history/search', 'conversation-history/search', { query: 'SEARCH', limit: 20 });
+  const searched = await callRoute('/api/chat-history/search', 'chat-history/search', { query: 'SEARCH', limit: 20 });
   if (searched.ok !== true) throw new Error(`host search failed: ${JSON.stringify(searched)}`);
   const bySession = new Map(searched.value.items.map((item) => [item.sessionId, item]));
   for (const expected of ['session-a', 'session-h']) {
@@ -685,7 +685,7 @@ const props = {
   if (!bySession.get('session-a').snippet.includes('SEARCH')) throw new Error('snippet must be rebuilt from prose');
   if (!bySession.get('session-h').snippet.includes('更深处的 SEARCH')) throw new Error('deep prose hit snippet missing');
 
-  const badRequest = await hostRoutes.get('/api/conversation-history/search').fetch(new Request('http://localhost/api/conversation-history/search', {
+  const badRequest = await hostRoutes.get('/api/chat-history/search').fetch(new Request('http://localhost/api/chat-history/search', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ nope: true }),

@@ -1,4 +1,4 @@
-# Conversation History
+# Chat History
 
 在 DeepSeek Harness 的侧边栏加一个 **History / 历史** 面板，位置在 **Plugins / 插件** 下方、**Schedules / 定时任务** 与 **More / 更多** 菜单上方。点击后作为主区域打开，可跨会话搜索聊天记录、在右侧读上下文，或打开原会话。
 
@@ -23,23 +23,25 @@
 在 DeepSeek Harness 中打开 **Plugins / 插件**，点击 **Add plugin / 添加插件** 右侧的下拉箭头，选择 **Install a third-party plugin / 安装第三方插件**，粘贴下面的地址并点击 **Install / 安装**：
 
 ```text
-github:michaelfeng/dsh-conversation-history#v1.2.0
+github:michaelfeng/dsh-chat-history#v2.0.0
 ```
 
-安装完成后点击 **Enable now / 立即启用**。在插件详情中确认插件和 **Conversation History 组件** 两个开关都已开启，组件显示 **Running / 运行中**。随后侧边栏 **Plugins / 插件** 下方会出现 **History / 历史** 面板，点击即可使用；它不依赖当前是否打开了会话。
+安装完成后点击 **Enable now / 立即启用**。在插件详情中确认插件和 **Chat History 组件** 两个开关都已开启，组件显示 **Running / 运行中**。随后侧边栏 **Plugins / 插件** 下方会出现 **History / 历史** 面板，点击即可使用；它不依赖当前是否打开了会话。
+
+> **从旧版升级（1.x → 2.0.0）**：项目已从 `dsh-conversation-history` 改名为 `dsh-chat-history`。请先移除旧的 **Conversation History** 插件（bundle 与组件），再按上面的地址安装新版本，避免两个 bundle 同时注册。缓存目录也从 `cache/conversation-history` 改名为 `cache/chat-history`，首次打开会重新整理一次索引。
 
 如果需要使用本地源码：
 
 ```sh
-git clone https://github.com/michaelfeng/dsh-conversation-history.git
-cd dsh-conversation-history
+git clone https://github.com/michaelfeng/dsh-chat-history.git
+cd dsh-chat-history
 ```
 
 然后在同一个“安装第三方插件”对话框中填写克隆后文件夹的绝对路径。也可以通过 Harness 的插件管理工具调用 `install_bundle`，把 `target` 设置为这个目录的绝对路径。
 
 本项目是第三方插件，与 DeepSeek 官方无隶属关系。集成验证基于 Harness **0.2.1-rc.3** 的桌面插件接口；其他版本可能需要适配。插件运行需要 Harness 提供的会话、连接和界面服务，不能作为普通网页直接使用。
 
-> 如果以前装过名称为 `@local/dsh-conversation-history` 的开发副本，请先关闭或移除旧副本，再安装本仓库版本，避免重复注册组件。
+> 如果以前装过名称为 `@local/dsh-chat-history` 的开发副本，请先关闭或移除旧副本，再安装本仓库版本，避免重复注册组件。
 
 ## 使用
 
@@ -52,7 +54,7 @@ cd dsh-conversation-history
 
 ## 安装验证
 
-1.2.0 只把入口从会话内的 History 标签页移到侧边栏面板，搜索、定位与上下文逻辑未变；下面的安装验证记录对应 **v1.1.0**。
+2.0.0 把项目与包名从 `dsh-conversation-history` 改为 `dsh-chat-history`，并把内部 RPC 路径、缓存目录和 locale 命名空间一并改用 `chat-history`；搜索、定位与上下文逻辑未变。1.2.0 只把入口从会话内的 History 标签页移到侧边栏面板。下面的安装验证记录对应 **v1.1.0**。
 
 2026-10-28 在 macOS 上，使用 DeepSeek Harness **0.2.1-rc.3** 桌面发行版附带的 Web 实例完成验证。实例使用独立的临时 `DSH_HOME`，通过插件页面从 GitHub 安装 **v1.1.0**，未配置模型 API key。
 
@@ -88,7 +90,7 @@ cd dsh-conversation-history
 
 插件本身不发送外部网络请求，不调用模型，不需要额外的 API key，也不包含遥测。界面通过 Harness 的连接通道与插件后端通信；远程部署时应以 Harness 自身的连接和存储边界为准。
 
-缓存默认保存在 `$DSH_HOME/cache/conversation-history/`，包含从聊天记录提取的文本。它不是加密存储，请按原始聊天记录同样的敏感程度保管。插件不会修改原始会话日志。关闭组件后可删除派生缓存，下次开启会重新建立。
+缓存默认保存在 `$DSH_HOME/cache/chat-history/`，包含从聊天记录提取的文本。它不是加密存储，请按原始聊天记录同样的敏感程度保管。插件不会修改原始会话日志。关闭组件后可删除派生缓存，下次开启会重新建立。
 
 ## 开发
 
@@ -119,7 +121,7 @@ npm run demo
 | `tests/` | 虚构数据回归测试 |
 | `scripts/` | 演示页生成和发布内容检查 |
 
-遇到问题请提交 [Issue](https://github.com/michaelfeng/dsh-conversation-history/issues)，说明 Harness 版本、插件版本、复现步骤，以及经过删减的错误信息。请不要上传原始会话、账户配置或密钥。
+遇到问题请提交 [Issue](https://github.com/michaelfeng/dsh-chat-history/issues)，说明 Harness 版本、插件版本、复现步骤，以及经过删减的错误信息。请不要上传原始会话、账户配置或密钥。
 
 ## 许可证
 

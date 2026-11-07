@@ -1,6 +1,6 @@
 # Register the view without changing the host's global search settings.
 - insert:
-    - id: conversation-history
-      name: dsh-conversation-history
+    - id: chat-history
+      name: dsh-chat-history
       config:
-        cacheDir: !!js dshHomePath('cache/conversation-history')
+        cacheDir: !!js dshHomePath('cache/chat-history')
